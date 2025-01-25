@@ -1,0 +1,21 @@
+{
+    "cSpell.words": [
+        "Allman",
+        "autoupdate",
+        "includedirs",
+        "msdsm",
+        "msdsmwmi",
+        "MYJOY",
+        "NTSTATUS",
+        "outputdir",
+        "PHID",
+        "tracewpp",
+        "umdf",
+        "WDFDEVICE",
+        "WDFQUEUE",
+        "WDFREQUEST",
+        "WDFTIMER",
+        "WDFUSBDEVICE",
+        "xmake"
+    ]
+}
