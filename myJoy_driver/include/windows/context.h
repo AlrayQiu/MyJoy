@@ -8,6 +8,9 @@
 #include <wdfusb.h>
 
 #include <hidport.h>
+#include "hid_def.h"
+
+ELIMINATE_UNUSED_HEADER_FILE_WARNINGS();
 
 typedef UCHAR HID_REPORT_DESCRIPTOR, *PHID_REPORT_DESCRIPTOR;
 
@@ -17,10 +20,10 @@ typedef struct _DEVICE_CONTEXT
     WDFQUEUE               DefaultQueue;
     WDFQUEUE               ManualQueue;
     HID_DEVICE_ATTRIBUTES  HidDeviceAttributes;
-    BYTE                   DeviceData;
     HID_DESCRIPTOR         HidDescriptor;
     PHID_REPORT_DESCRIPTOR ReportDescriptor;
     BOOLEAN                ReadReportDescFromRegistry;
+    HID_INPUT_REPORT       DeviceData;
 } DEVICE_CONTEXT, *PDEVICE_CONTEXT;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_CONTEXT, GetDeviceContext)

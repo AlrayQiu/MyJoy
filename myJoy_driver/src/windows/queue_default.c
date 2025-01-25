@@ -1,6 +1,6 @@
 #include "queue.h"
 #include "request.h"
-#include "ioprocessor.h"
+#include "processor.h"
 
 #include "context.h"
 #include "utils.h"
@@ -83,20 +83,12 @@ VOID EvtIoDeviceControl(IN WDFQUEUE   Queue,
             status = WriteReport(queueContext, Request);
             break;
 
-        case IOCTL_UMDF_HID_GET_FEATURE:
-            status = GetFeature(queueContext, Request);
-            break;
-
-        case IOCTL_UMDF_HID_SET_FEATURE:
-            status = SetFeature(queueContext, Request);
-            break;
-
         case IOCTL_UMDF_HID_GET_INPUT_REPORT:
-            status = GetInputReport(queueContext, Request);
+            status = ReadReport(queueContext, Request, &completeRequest);
             break;
 
         case IOCTL_UMDF_HID_SET_OUTPUT_REPORT:
-            status = SetOutputReport(queueContext, Request);
+            status = WriteReport(queueContext, Request);
             break;
 
         case IOCTL_HID_GET_STRING:
@@ -107,6 +99,8 @@ VOID EvtIoDeviceControl(IN WDFQUEUE   Queue,
             status = GetIndexedString(Request);
             break;
 
+        case IOCTL_UMDF_HID_GET_FEATURE:
+        case IOCTL_UMDF_HID_SET_FEATURE:
         case IOCTL_HID_SEND_IDLE_NOTIFICATION_REQUEST:  // METHOD_NEITHER
         case IOCTL_HID_ACTIVATE_DEVICE:                 // METHOD_NEITHER
         case IOCTL_HID_DEACTIVATE_DEVICE:               // METHOD_NEITHER

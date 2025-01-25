@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "Allman",
+        "Alray",
         "autoupdate",
         "includedirs",
         "msdsm",
@@ -9,13 +10,16 @@
         "NTSTATUS",
         "outputdir",
         "PHID",
+        "PIRP",
         "tracewpp",
         "umdf",
         "WDFDEVICE",
+        "WDFMEMORY",
         "WDFQUEUE",
         "WDFREQUEST",
         "WDFTIMER",
         "WDFUSBDEVICE",
-        "xmake"
+        "xmake",
+        "ybmq"
     ]
 }
