@@ -1,16 +1,19 @@
 #pragma once
-
+// clang-format off
 #define ASSERT_STATUS_SUCCESS(status, message, ...) \
     if (!NT_SUCCESS(status))                        \
     {                                               \
-        KdPrint(("Error:" message, ##__VA_ARGS__)); \
-        KdPrint(("Status = 0x%x\n", status));       \
+        KdPrint(("Error: "));                       \
+        KdPrint((message));                         \
+        KdPrint(("Status = 0x%x\r\n", status));     \
         return status;                              \
     }
 
 #define ASSERT_STATUS_IS(status, isStatus, message, ...) \
     if (status == isStatus)                              \
     {                                                    \
-        KdPrint((message "\n", ##__VA_ARGS__));          \
+        KdPrint((message));                              \
+        KdPrint(("\r\n"));                               \
         return status;                                   \
     }
+// clang-format on

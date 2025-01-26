@@ -1,13 +1,14 @@
 
 #pragma once
 
-#include <Windows.h>
+#include <ntddk.h>
 #include <wdf.h>
 
 #include <usb.h>
 #include <wdfusb.h>
 
-#include <hidport.h>
+#include <hidclass.h>
+
 #include "hid_def.h"
 
 ELIMINATE_UNUSED_HEADER_FILE_WARNINGS();
@@ -32,7 +33,6 @@ typedef struct _QUEUE_CONTEXT
 {
     WDFQUEUE        Queue;
     PDEVICE_CONTEXT DeviceContext;
-    UCHAR           OutputReport;
 
 } QUEUE_CONTEXT, *PQUEUE_CONTEXT;
 

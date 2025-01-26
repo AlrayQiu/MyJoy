@@ -1,8 +1,7 @@
 #pragma once
 
-#include <minwindef.h>
-#include "WudfWdm.h"
-#include "wdftypes.h"
+#include <ntddk.h>
+#include <wdf.h>
 
 NTSTATUS QueueCreate(IN WDFDEVICE Device, OUT WDFQUEUE *Queue);
 

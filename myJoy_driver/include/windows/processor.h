@@ -1,9 +1,6 @@
 #pragma once
 
-#include <minwindef.h>
-#include "WudfWdm.h"
 #include "context.h"
-#include "wdftypes.h"
 
 NTSTATUS ReadReport(IN PQUEUE_CONTEXT      QueueContext,
                     IN WDFREQUEST          Request,
@@ -23,6 +20,4 @@ NTSTATUS GetString(IN WDFREQUEST Request);
 
 NTSTATUS GetIndexedString(IN WDFREQUEST Request);
 
-NTSTATUS GetStringId(IN WDFREQUEST Request,
-                     OUT ULONG    *StringId,
-                     OUT ULONG    *LanguageId);
+NTSTATUS GetStringId(IN WDFREQUEST Request, OUT ULONG *StringId, OUT ULONG *LanguageId);

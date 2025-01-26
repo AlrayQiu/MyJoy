@@ -2,6 +2,7 @@
 #include "queue.h"
 #include "request.h"
 
+#include "utils.h"
 #include "wdftimer.h"
 
 #include "context.h"
@@ -10,6 +11,7 @@ void EvtTimerFunc(IN WDFTIMER Timer);
 
 NTSTATUS ManualQueueCreate(IN WDFDEVICE Device, OUT WDFQUEUE *Queue)
 {
+    KdPrint(("ManualQueueCreate Start\r\n"));
     NTSTATUS              status;
     WDF_IO_QUEUE_CONFIG   queueConfig;
     WDF_OBJECT_ATTRIBUTES queueAttributes;
@@ -21,8 +23,7 @@ NTSTATUS ManualQueueCreate(IN WDFDEVICE Device, OUT WDFQUEUE *Queue)
 
     WDF_IO_QUEUE_CONFIG_INIT(&queueConfig, WdfIoQueueDispatchManual);
 
-    WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&queueAttributes,
-                                            MANUAL_QUEUE_CONTEXT);
+    WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&queueAttributes, MANUAL_QUEUE_CONTEXT);
 
     status = WdfIoQueueCreate(Device, &queueConfig, &queueAttributes, &queue);
 
@@ -36,25 +37,19 @@ NTSTATUS ManualQueueCreate(IN WDFDEVICE Device, OUT WDFQUEUE *Queue)
     queueContext->Queue         = queue;
     queueContext->DeviceContext = GetDeviceContext(Device);
 
-    WDF_TIMER_CONFIG_INIT_PERIODIC(
-        &timerConfig, EvtTimerFunc, timerPeriodInSeconds * 1000);
+    WDF_TIMER_CONFIG_INIT_PERIODIC(&timerConfig, EvtTimerFunc, timerPeriodInSeconds * 1000);
 
     WDF_OBJECT_ATTRIBUTES_INIT(&timerAttributes);
     timerAttributes.ParentObject = queue;
-    status =
-        WdfTimerCreate(&timerConfig, &timerAttributes, &queueContext->Timer);
-
-    if (!NT_SUCCESS(status))
-    {
-        KdPrint(("WdfTimerCreate failed 0x%x\n", status));
-        return status;
-    }
+    status                       = WdfTimerCreate(&timerConfig, &timerAttributes, &queueContext->Timer);
+    ASSERT_STATUS_SUCCESS(status, "WdfTimerCreate Failed");
 
     LONGLONG timeout = WDF_REL_TIMEOUT_IN_SEC(1);
     WdfTimerStart(queueContext->Timer, timeout);
 
     *Queue = queue;
 
+    KdPrint(("ManualQueueCreate End:0x%x\r\n", status));
     return status;
 }
 
@@ -66,8 +61,6 @@ void EvtTimerFunc(IN WDFTIMER Timer)
     WDFREQUEST            request;
     HID_INPUT_REPORT      readReport;
 
-    KdPrint(("EvtTimerFunc\n"));
-
     queue        = (WDFQUEUE)WdfTimerGetParentObject(Timer);
     queueContext = GetManualQueueContext(queue);
 
@@ -78,10 +71,11 @@ void EvtTimerFunc(IN WDFTIMER Timer)
 
     if (NT_SUCCESS(status))
     {
+        KdPrint(("WdfIoQueueRetrieveNextRequest\n"));
+
         readReport = queueContext->DeviceContext->DeviceData;
 
-        status =
-            RequestCopyFromBuffer(request, &readReport, sizeof(readReport));
+        status = RequestCopyFromBuffer(request, &readReport, sizeof(readReport));
 
         WdfRequestComplete(request, status);
     }

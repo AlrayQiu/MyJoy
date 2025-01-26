@@ -5,3 +5,6 @@ driver dev helper tools
 ### hid report descriptor generator
 - 用于生成 HID_REPORT_DESCRIPTOR
 [下载地址(url)](https://www.usb.org/document-library/hid-descriptor-tool)
+
+## devcon-installer
+[github](https://github.com/Drawbackz/DevCon-Installer/releases)

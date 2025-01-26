@@ -1,0 +1,90 @@
+;/*++
+;
+;Copyright (c) Microsoft Corporation All rights Reserved
+;
+;Module Name:
+;
+;    vihidmini.inf
+;
+;Abstract:
+;    INF file for installing HID minidriver (KMDF version)
+;
+;Installation Notes:
+;    Using Devcon: Type "devcon install vhidmini.inf root\vhidmini" to install
+;
+;Important:
+;    This INF depends on MsHidKmdf.inf, which was introduced in build 22000
+;
+;--*/
+[Version]
+Signature="$WINDOWS NT$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%ProviderString%
+DriverVer=10/01/2002,6.0.5058.0
+CatalogFile=wudf.cat
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir=13
+
+[SourceDisksNames]
+1=%DiskDesc%,,,
+
+[SourceDisksFiles]
+vhidmini.sys=1
+
+; ================= Device section =====================
+
+[Manufacturer]
+%ManufacturerString%=Microsoft,NT$ARCH$.10.0...22000
+
+[Microsoft.NT$ARCH$.10.0...22000]
+%DeviceDesc%=vhidmini, root\vhidmini
+
+[vhidmini.NT]
+CopyFiles=KMDriverCopy
+Include=MsHidKmdf.inf
+Needs=MsHidKmdf.NT
+
+[vhidmini.NT.HW]
+Include=MsHidKmdf.inf
+Needs=MsHidKmdf.NT.HW
+
+[vhidmini.NT.Services]
+Include=MsHidKmdf.inf
+Needs=MsHidKmdf.NT.Services
+AddService=vhidmini,0,vhidmini_Service_Inst
+
+[vhidmini.NT.Filters]
+AddFilter=vhidmini,,vhidmini_Filter_Install
+
+[vhidmini_Filter_Install]
+FilterPosition=Lower
+
+[vhidmini_Service_Inst]
+DisplayName    = %ServiceDesc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %13%\vhidmini.sys
+
+[vhidmini.NT.Wdf]
+KmdfService=vhidmini, vhidmini_wdfsect
+
+[vhidmini_wdfsect]
+KmdfLibraryVersion=$KMDFVERSION$
+
+; ================= copy files =====================
+
+[KMDriverCopy]
+vhidmini.sys
+
+;---------------------------------------------------------------;
+
+[Strings]
+ProviderString     = "TODO-Set-Provider"
+ManufacturerString = "TODO-Set-Manufacturer"
+DeviceDesc         = "HID minidriver (KMDF version) Device"
+ServiceDesc        = "HID minidriver (KMDF version) Service"
+DiskDesc           = "HID minidriver (KMDF version) Installation Disk"

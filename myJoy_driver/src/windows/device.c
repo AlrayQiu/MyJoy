@@ -1,13 +1,11 @@
+#include "default/myJoy_default_hid_report_descriptor.h"
 #include "hid_def/hid_def.h"
 
 #include "device.h"
-#include "WudfWdm.h"
 #include "queue.h"
 
 #include "context.h"
 #include "utils.h"
-
-#include "wdffdo.h"
 
 NTSTATUS MyJoyDeviceAdd(IN WDFDRIVER Driver, IN OUT PWDFDEVICE_INIT DeviceInit)
 {
@@ -28,8 +26,10 @@ NTSTATUS MyJoyDeviceAdd(IN WDFDRIVER Driver, IN OUT PWDFDEVICE_INIT DeviceInit)
 
     ASSERT_STATUS_SUCCESS(status, "WdfDeviceCreate failed");
 
-    deviceContext         = GetDeviceContext(device);
-    deviceContext->Device = device;
+    deviceContext                   = GetDeviceContext(device);
+    deviceContext->Device           = device;
+    deviceContext->HidDescriptor    = S_MyJoyHidDescriptor;
+    deviceContext->ReportDescriptor = S_ReportDescriptor;
 
     hidAttributes = &deviceContext->HidDeviceAttributes;
     RtlZeroMemory(hidAttributes, sizeof(HID_DEVICE_ATTRIBUTES));
@@ -42,11 +42,11 @@ NTSTATUS MyJoyDeviceAdd(IN WDFDRIVER Driver, IN OUT PWDFDEVICE_INIT DeviceInit)
     if (!NT_SUCCESS(status))
         return status;
 
-    // status = ManualQueueCreate(device, &deviceContext->ManualQueue);
-    // if (!NT_SUCCESS(status))
-    //     return status;
+    status = ManualQueueCreate(device, &deviceContext->ManualQueue);
+    if (!NT_SUCCESS(status))
+        return status;
 
-    deviceContext->HidDescriptor = S_MyJoyHidDescriptor;
+    KdPrint(("End MyJoyDeviceAdd:0x%x\r\n", status));
 
     return status;
 }

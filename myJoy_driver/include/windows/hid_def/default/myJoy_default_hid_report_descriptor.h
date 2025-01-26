@@ -3,7 +3,8 @@
 #pragma once
 
 // clang-format off
-static char S_ReportDescriptor[77] = {
+#include <ntdef.h>
+static UCHAR S_ReportDescriptor[77] = {
     0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
     0x15, 0x00,                    // LOGICAL_MINIMUM (0)
     0x09, 0x04,                    // USAGE (Joystick)

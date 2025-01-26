@@ -1,8 +1,8 @@
-BasedOnStyle: LLVM
+BasedOnStyle: google
 IncludeBlocks: Preserve
 SortIncludes: false
 IndentWidth: 4
-ColumnLimit: 105
+ColumnLimit: 80
 BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: Never
 
@@ -22,5 +22,3 @@ IndentWrappedFunctionNames: false
 
 KeepEmptyLinesAtTheStartOfBlocks: false
 AlignAfterOpenBracket: Align
-
-AlignConsecutiveMacros: true
