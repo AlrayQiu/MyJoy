@@ -7,7 +7,7 @@ local src_files = os.files("*.cpp")
 for _, file in ipairs(src_files) do
     local filename = path.basename(file)
     target(filename)
-        set_kind("binary")
+        add_rules("driver_test")
         add_files(file)
         add_links("CfgMgr32","hid")
         set_targetdir("$(buildir)/test")

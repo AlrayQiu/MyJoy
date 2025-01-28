@@ -1,8 +1,8 @@
-BasedOnStyle: LLVM
+BasedOnStyle: WebKit
 IncludeBlocks: Preserve
 SortIncludes: false
 IndentWidth: 4
-ColumnLimit: 105
+ColumnLimit: 120
 BreakBeforeBraces: Allman
 AllowShortIfStatementsOnASingleLine: Never
 

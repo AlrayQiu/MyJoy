@@ -4,7 +4,7 @@
 #include <wdf.h>
 
 #include <hidclass.h>
-#include <km/hidport.h>
+#include <hidport.h>
 #include <basetsd.h>
 #include <minwindef.h>
 

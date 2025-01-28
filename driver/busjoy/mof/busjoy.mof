@@ -1,0 +1,25 @@
+#PRAGMA AUTORECOVER
+
+[Dynamic, Provider("WMIProv"),
+ WMI,
+ Description("Busjoy Bus driver information"),
+ guid("{D3A29F47-5F2E-4A6D-9C11-5AB4D6E7B13C}"),
+ locale("MS\\0x804")]
+class BusjoyBusInformation
+{
+    [key, read]
+     string InstanceName;
+    [read] boolean Active;
+
+    [WmiDataId(1),
+     read,
+     Description("Number of errors that occurred on this device")]
+    uint32   ErrorCount;
+
+    [WmiDataId(2),
+     read,
+     write,
+     Description("The DebugPrintLevel property indicates the debug output level of toaster bus device.")]
+    uint32 DebugPrintLevel;
+
+};
