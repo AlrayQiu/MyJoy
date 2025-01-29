@@ -106,7 +106,7 @@ VOID EvtIoDeviceControl(IN WDFQUEUE   Queue,
         status = WdfRequestRetrieveInputBuffer(
             Request,
             sizeof(BUSENUM_PLUGIN_HARDWARE) + (sizeof(UNICODE_NULL) * 2), // 2 for double NULL termination (MULTI_SZ)
-            (VOID*)&plugIn,
+            (VOID *)&plugIn,
             &length);
         if (!NT_SUCCESS(status))
         {
@@ -132,7 +132,7 @@ VOID EvtIoDeviceControl(IN WDFQUEUE   Queue,
         }
         break;
     case IOCTL_BUSENUM_UNPLUG_HARDWARE:
-        status = WdfRequestRetrieveInputBuffer(Request, sizeof(BUSENUM_UNPLUG_HARDWARE), (VOID*)&unPlug, &length);
+        status = WdfRequestRetrieveInputBuffer(Request, sizeof(BUSENUM_UNPLUG_HARDWARE), (VOID *)&unPlug, &length);
         if (!NT_SUCCESS(status))
         {
             KdPrint(("WdfRequestRetrieveInputBuffer failed 0x%x\n", status));
@@ -146,7 +146,7 @@ VOID EvtIoDeviceControl(IN WDFQUEUE   Queue,
 
         break;
     case IOCTL_BUSENUM_EJECT_HARDWARE:
-        status = WdfRequestRetrieveInputBuffer(Request, sizeof(BUSENUM_EJECT_HARDWARE), (VOID*)&eject, &length);
+        status = WdfRequestRetrieveInputBuffer(Request, sizeof(BUSENUM_EJECT_HARDWARE), (VOID *)&eject, &length);
         if (!NT_SUCCESS(status))
         {
             KdPrint(("WdfRequestRetrieveInputBuffer failed 0x%x\n", status));

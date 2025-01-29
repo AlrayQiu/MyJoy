@@ -2,13 +2,13 @@
 ;
 ;Module Name:
 ;
-;    myjoy_driver_um.inf
+;    hidjoy_um.inf
 ;
 ;Abstract:
-;    INF file for installing myjoy_driver driver (UMDF 2 version)
+;    INF file for installing hidjoy driver (UMDF 2 version)
 ;
 ; Installation Notes:
-;    Using Devcon: Type "devcon install myjoy_driver_km.inf root\myjoy_driver" to install
+;    Using Devcon: Type "devcon install hidjoy.inf {2163FA90-57F7-9801-A2B0-AEC1E5FBFEEA}\BusJoy" to install
 ;
 ; Important:
 ;    This INF depends on MsHidUmdf.inf, which was introduced in build 22000
@@ -22,7 +22,7 @@ Class=HIDClass
 ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
 Provider=%ProviderString%
 DriverVer=10/01/2002,6.0.5058.0
-CatalogFile=myjoy_driver.cat
+CatalogFile=myjoy.cat
 PnpLockdown = 1
 
 
@@ -33,7 +33,7 @@ DefaultDestDir = 13
 99=%Disk_Description%,,,
 
 [SourceDisksFiles]
-myjoy_driver.sys=99
+hidjoy.sys=99
 
 ; ================= Device section =====================
 
@@ -42,45 +42,45 @@ myjoy_driver.sys=99
 %ManufacturerString%=Microsoft, NT$ARCH$.10.0...22000
 
 [Microsoft.NT$ARCH$.10.0...22000]
-%DeviceDesc%=myjoy_driver, root\myjoy_driver
+%DeviceDesc%=hidjoy, {2163FA90-57F7-9801-A2B0-AEC1E5FBFEEA}\BusJoy
 
-[myjoy_driver.NT]
+[hidjoy.NT]
 CopyFiles=KMDriverCopy
 Include=MsHidKmdf.inf
 Needs=MsHidKmdf.NT
 
-[myjoy_driver.NT.HW]
+[hidjoy.NT.HW]
 Include=MsHidKmdf.inf
 Needs=MsHidKmdf.NT.HW
 
-[myjoy_driver.NT.Services]
+[hidjoy.NT.Services]
 Include=MsHidKmdf.inf
 Needs=MsHidKmdf.NT.Services
-AddService=myjoy_driver,0,myjoy_driver_Service_Inst
+AddService=hidjoy,0,hidjoy_Service_Inst
 
-[myjoy_driver.NT.Filters]
-AddFilter=myjoy_driver,,myjoy_driver_Filter_Install
+[hidjoy.NT.Filters]
+AddFilter=hidjoy,,hidjoy_Filter_Install
 
-[myjoy_driver_Filter_Install]
+[hidjoy_Filter_Install]
 FilterPosition=Lower
 
-[myjoy_driver_Service_Inst]
+[hidjoy_Service_Inst]
 DisplayName    = %ServiceDesc%
 ServiceType    = 1
 StartType      = 3
 ErrorControl   = 1
-ServiceBinary  = %13%\myjoy_driver.sys
+ServiceBinary  = %13%\hidjoy.sys
 
-[myjoy_driver.NT.Wdf]
-KmdfService=myjoy_driver, myjoy_driver_wdfsect
+[hidjoy.NT.Wdf]
+KmdfService=hidjoy, hidjoy_wdfsect
 
-[myjoy_driver_wdfsect]
+[hidjoy_wdfsect]
 KmdfLibraryVersion=$KMDFVERSION$
 
 ; ================= copy files =====================
 
 [KMDriverCopy]
-myjoy_driver.sys
+hidjoy.sys
 
 
 ;---------------------------------------------------------------;
@@ -88,6 +88,6 @@ myjoy_driver.sys
 [Strings]
 ProviderString     = "Alray Qiu"
 ManufacturerString = "Alray Qiu @2025"
-DeviceDesc         = "myjoy (KMDF version) Device"
-ServiceDesc        = "myjoy (KMDF version) Service"
-DiskDesc           = "myjoy (KMDF version) Installation Disk"
+DeviceDesc         = "myjoy joystick (KMDF version) Device"
+ServiceDesc        = "myjoy joystick (KMDF version) Service"
+DiskDesc           = "myjoy joystick (KMDF version) Installation Disk"

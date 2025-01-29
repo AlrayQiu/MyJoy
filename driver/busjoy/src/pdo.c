@@ -1,5 +1,5 @@
 #include "bus_public.h"
-#include "wdm.h"
+#include "ntddk.h"
 #include <child.h>
 
 #include <ntintsafe.h>
@@ -27,6 +27,7 @@ NTSTATUS BusEvtChildListIdentificationDescriptionDuplicate(
     PWDF_CHILD_IDENTIFICATION_DESCRIPTION_HEADER DestinationIdentificationDescription)
 
 {
+    KdPrint(("BusEvtChildListIdentificationDescriptionDuplicate\r\n"));
     PCHILD_PDO_IDENTIFICATION_DESCRIPTION src, dst;
     size_t                                safeMultResult;
     NTSTATUS                              status;
@@ -36,22 +37,7 @@ NTSTATUS BusEvtChildListIdentificationDescriptionDuplicate(
     src = CONTAINING_RECORD(SourceIdentificationDescription, CHILD_PDO_IDENTIFICATION_DESCRIPTION, Header);
     dst = CONTAINING_RECORD(DestinationIdentificationDescription, CHILD_PDO_IDENTIFICATION_DESCRIPTION, Header);
 
-    dst->SerialNo       = src->SerialNo;
-    dst->CchHardwareIds = src->CchHardwareIds;
-    status              = RtlSizeTMult(dst->CchHardwareIds, sizeof(WCHAR), &safeMultResult);
-    if (!NT_SUCCESS(status))
-    {
-        return status;
-    }
-
-    dst->HardwareIds = (PWCHAR)ExAllocatePoolZero(POOL_FLAG_NON_PAGED, safeMultResult, BUS_TAG);
-
-    if (dst->HardwareIds == NULL)
-    {
-        return STATUS_INSUFFICIENT_RESOURCES;
-    }
-
-    RtlCopyMemory(dst->HardwareIds, src->HardwareIds, dst->CchHardwareIds * sizeof(WCHAR));
+    dst->SerialNo = src->SerialNo;
 
     return STATUS_SUCCESS;
 }
@@ -62,6 +48,7 @@ BOOLEAN BusEvtChildListIdentificationDescriptionCompare(
     PWDF_CHILD_IDENTIFICATION_DESCRIPTION_HEADER SecondIdentificationDescription)
 
 {
+    KdPrint(("BusEvtChildListIdentificationDescriptionCompare"));
     PCHILD_PDO_IDENTIFICATION_DESCRIPTION lhs, rhs;
 
     UNREFERENCED_PARAMETER(DeviceList);
@@ -78,17 +65,6 @@ BOOLEAN BusEvtChildListIdentificationDescriptionCompare(
 VOID BusEvtChildListIdentificationDescriptionCleanup(
     _In_ WDFCHILDLIST DeviceList, _Out_ PWDF_CHILD_IDENTIFICATION_DESCRIPTION_HEADER IdentificationDescription)
 {
-    PCHILD_PDO_IDENTIFICATION_DESCRIPTION pDesc;
-
-    UNREFERENCED_PARAMETER(DeviceList);
-
-    pDesc = CONTAINING_RECORD(IdentificationDescription, CHILD_PDO_IDENTIFICATION_DESCRIPTION, Header);
-
-    if (pDesc->HardwareIds != NULL)
-    {
-        ExFreePool(pDesc->HardwareIds);
-        pDesc->HardwareIds = NULL;
-    }
 }
 
 #pragma prefast(pop) // disable:6101
@@ -103,7 +79,7 @@ NTSTATUS BusEvtDeviceListCreatePdo(WDFCHILDLIST                                 
 
     pDesc = CONTAINING_RECORD(IdentificationDescription, CHILD_PDO_IDENTIFICATION_DESCRIPTION, Header);
 
-    return BusCreatePdo(WdfChildListGetDevice(DeviceList), ChildInit, pDesc->HardwareIds, pDesc->SerialNo);
+    return BusCreatePdo(WdfChildListGetDevice(DeviceList), ChildInit, BUS_HARDWARE_IDS, pDesc->SerialNo);
 }
 
 NTSTATUS BusCreatePdo(_In_ WDFDEVICE                         Device,
@@ -118,7 +94,7 @@ NTSTATUS BusCreatePdo(_In_ WDFDEVICE                         Device,
     WDF_OBJECT_ATTRIBUTES         pdoAttributes;
     WDF_DEVICE_PNP_CAPABILITIES   pnpCaps;
     WDF_DEVICE_POWER_CAPABILITIES powerCaps;
-    BUSJOY_INTERFACE_STANDARD     BusJoyInterface;
+    INTERFACE                     BusJoyInterface;
     DECLARE_CONST_UNICODE_STRING(compatId, BUSENUM_COMPATIBLE_IDS);
     DECLARE_CONST_UNICODE_STRING(deviceLocation, L"Bus Joy 0");
     DECLARE_UNICODE_STRING_SIZE(buffer, MAX_INSTANCE_ID_LEN);
@@ -164,7 +140,7 @@ NTSTATUS BusCreatePdo(_In_ WDFDEVICE                         Device,
         return status;
     }
 
-    status = RtlUnicodeStringPrintf(&buffer, L"Microsoft_Eliyas_Toaster_%02d", SerialNo);
+    status = RtlUnicodeStringPrintf(&buffer, L"Myjoy_BusJoy_Device %02d", SerialNo);
     if (!NT_SUCCESS(status))
     {
         return status;

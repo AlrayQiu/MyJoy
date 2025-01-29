@@ -15,12 +15,10 @@ NTSTATUS BusPlugInDevice(WDFDEVICE Device, PWCHAR HardwareIds, size_t CchHardwar
 
     WDF_CHILD_IDENTIFICATION_DESCRIPTION_HEADER_INIT(&description.Header, sizeof(description));
 
-    description.SerialNo       = SerialNo;
-    description.CchHardwareIds = CchHardwareIds;
-    description.HardwareIds    = HardwareIds;
+    description.SerialNo = SerialNo;
 
-    status = WdfChildListAddOrUpdateChildDescriptionAsPresent(
-        WdfFdoGetDefaultChildList(Device), &description.Header, NULL);
+    status =
+        WdfChildListAddOrUpdateChildDescriptionAsPresent(WdfFdoGetDefaultChildList(Device), &description.Header, NULL);
 
     return status;
 }

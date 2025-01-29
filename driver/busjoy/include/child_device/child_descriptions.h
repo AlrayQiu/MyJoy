@@ -8,10 +8,6 @@ typedef struct _CHILD_PDO_IDENTIFICATION_DESCRIPTION
     WDF_CHILD_IDENTIFICATION_DESCRIPTION_HEADER Header; // should contain this header
 
     ULONG SerialNo;
-
-    size_t CchHardwareIds;
-
-    _Field_size_bytes_(CchHardwareIds) PWCHAR HardwareIds;
 } CHILD_PDO_IDENTIFICATION_DESCRIPTION, *PCHILD_PDO_IDENTIFICATION_DESCRIPTION;
 
 typedef struct _PDO_DEVICE_DATA

@@ -9,6 +9,7 @@ for _, file in ipairs(src_files) do
     target(filename)
         add_rules("driver_test")
         add_files(file)
+        add_includedirs("./")
         add_links("CfgMgr32","hid")
         set_targetdir("$(buildir)/test")
 end

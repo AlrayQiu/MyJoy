@@ -3,7 +3,7 @@
 #include <wdf.h>
 #define NTSTRSAFE_LIB
 #include <initguid.h>
-#include <busjoy_wmi.h>
+#include <busjoy_mof.h>
 
 typedef BusjoyBusInformation BUS_WMI_STD_DATA, *PBUS_WMI_STD_DATA;
 

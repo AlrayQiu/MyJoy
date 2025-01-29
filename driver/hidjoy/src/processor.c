@@ -36,8 +36,7 @@ NTSTATUS WriteReport(_In_ PQUEUE_CONTEXT QueueContext, _In_ WDFREQUEST Request)
     ULONG           reportSize;
     PHID_OUT_REPORT outputReport;
     KdPrint(("WriteReport\n"));
-    status =
-        WdfRequestRetrieveInputBuffer(Request, sizeof(HID_OUT_REPORT), (PVOID *)&outputReport, NULL);
+    status = WdfRequestRetrieveInputBuffer(Request, sizeof(HID_OUT_REPORT), (PVOID *)&outputReport, NULL);
     if (NT_SUCCESS(status))
     {
         QueueContext->DeviceContext->DeviceData = *outputReport;
@@ -72,9 +71,7 @@ NTSTATUS SetFeature(IN PQUEUE_CONTEXT QueueContext, IN WDFREQUEST Request)
     if (packet.reportBufferLen < reportSize)
     {
         status = STATUS_INVALID_BUFFER_SIZE;
-        KdPrint(("SetFeature: invalid input buffer. size %d, expect %d\n",
-                 packet.reportBufferLen,
-                 reportSize));
+        KdPrint(("SetFeature: invalid input buffer. size %d, expect %d\n", packet.reportBufferLen, reportSize));
         return status;
     }
 
@@ -137,9 +134,7 @@ NTSTATUS GetFeature(IN PQUEUE_CONTEXT QueueContext, IN WDFREQUEST Request)
     if (packet.reportBufferLen < reportSize)
     {
         status = STATUS_INVALID_BUFFER_SIZE;
-        KdPrint(("GetFeature: output buffer too small. Size %d, expect %d\n",
-                 packet.reportBufferLen,
-                 reportSize));
+        KdPrint(("GetFeature: output buffer too small. Size %d, expect %d\n", packet.reportBufferLen, reportSize));
         return status;
     }
 
@@ -177,9 +172,7 @@ NTSTATUS GetInputReport(IN PQUEUE_CONTEXT QueueContext, IN WDFREQUEST Request)
     if (packet.reportBufferLen < reportSize)
     {
         status = STATUS_INVALID_BUFFER_SIZE;
-        KdPrint(("GetInputReport: output buffer too small. Size %d, expect %d\n",
-                 packet.reportBufferLen,
-                 reportSize));
+        KdPrint(("GetInputReport: output buffer too small. Size %d, expect %d\n", packet.reportBufferLen, reportSize));
         return status;
     }
 
@@ -218,9 +211,7 @@ NTSTATUS SetOutputReport(IN PQUEUE_CONTEXT QueueContext, IN WDFREQUEST Request)
     if (packet.reportBufferLen < reportSize)
     {
         status = STATUS_INVALID_BUFFER_SIZE;
-        KdPrint(("SetOutputReport: invalid input buffer. size %d, expect %d\n",
-                 packet.reportBufferLen,
-                 reportSize));
+        KdPrint(("SetOutputReport: invalid input buffer. size %d, expect %d\n", packet.reportBufferLen, reportSize));
         return status;
     }
 
